@@ -1,0 +1,16 @@
+context.avgBPM = context.avgBPM || [];
+context.avgTemp = context.avgTemp || [];
+
+context.avgBPM.push(msg.payload.bpm);
+context.avgTemp.push(msg.payload.temp);
+
+if (context.avgBPM.length > 5) {  // Keep last 5 readings
+  context.avgBPM.shift();
+  context.avgTemp.shift();
+}
+
+let avgBPM = context.avgBPM.reduce((a,b)=>a+b)/context.avgBPM.length;
+let avgTemp = context.avgTemp.reduce((a,b)=>a+b)/context.avgTemp.length;
+
+msg.payload = `Avg BPM: ${avgBPM.toFixed(1)} | Avg Temp: ${avgTemp.toFixed(1)}°C`;
+return msg;
